@@ -5,8 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static chapter2.GenericSearch.dfs;
-import static chapter2.GenericSearch.nodeToPath;
+import static chapter2.GenericSearch.*;
 
 public class Maze {
 
@@ -39,7 +38,7 @@ public class Maze {
         Maze m = new Maze();
         System.out.println(m);
 
-        GenericSearch.Node solution1 = (GenericSearch.Node) dfs(m.start, m::goalTest, m::successors);
+       GenericSearch.Node solution1 = (GenericSearch.Node) dfs(m.start, m::goalTest, m::successors);
         if (solution1 == null) {
             System.out.println("No solution");
 
@@ -48,6 +47,28 @@ public class Maze {
             m.mark(path1);
             System.out.println(m);
             m.clear(path1);
+        }
+
+        GenericSearch.Node solution2 = (GenericSearch.Node) bfs(m.start, m::goalTest, m::successors);
+        if (solution2 == null) {
+            System.out.println("No solution");
+
+        } else {
+            List path2 = nodeToPath(solution2);
+            m.mark(path2);
+            System.out.println(m);
+            m.clear(path2);
+        }
+
+        Node<MazeLocation> solution3 = GenericSearch.astar(m.start,
+                m::goalTest, m::successors, m::manhattanDistance);
+        if (solution3 == null) {
+            System.out.println("No solution found using A*!");
+        } else {
+            List<MazeLocation> path3 = GenericSearch.nodeToPath(solution3);
+            m.mark(path3);
+            System.out.println(m);
+            m.clear(path3);
         }
     }
 
@@ -61,6 +82,17 @@ public class Maze {
         }
     }
 
+    public double euclideanDistance(MazeLocation ml) {
+        int xdist = ml.column - goal.column;
+        int ydist = ml.row - goal.row;
+        return Math.sqrt((xdist * xdist) + (ydist * ydist));
+    }
+
+    public double manhattanDistance(MazeLocation ml) {
+        int xdist = Math.abs(ml.column - goal.column);
+        int ydist = Math.abs(ml.row - goal.row);
+        return xdist + ydist;
+    }
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

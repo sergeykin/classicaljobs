@@ -30,7 +30,7 @@ public class Hanoi {
     }
 
     public static void main(String[] args) {
-        Hanoi hanoi = new Hanoi(3);
+        Hanoi hanoi = new Hanoi(4);
         System.out.println(hanoi.towerA);
         System.out.println(hanoi.towerB);
         System.out.println(hanoi.towerC);
